@@ -1,5 +1,7 @@
 # https://gist.github.com/santoshpy/6f982faf1eacdac153ffd86a3a694239
 
+courses_data/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
