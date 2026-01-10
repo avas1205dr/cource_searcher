@@ -136,17 +136,27 @@ class StepikParser:
         with open(filename, "w", encoding="utf-8") as f:
             json.dump(course_data, f, ensure_ascii=False, indent=2)
     
-    async def save_courses(self, courses: List[Dict], category_name: str) -> None:
+    async def save_courses(self, courses: List[Dict], category_name: str, processed_ids: set) -> int:
         os.makedirs(self.output_dir, exist_ok=True)
         
-        print(f"\nОбработка категории: {category_name} ({len(courses)} курсов)")
+        new_courses = [c for c in courses if c.get("id") not in processed_ids]
         
-        for i, course in enumerate(courses, 1):
+        if not new_courses:
+            print(f"\nПропущено: {category_name} (все курсы уже обработаны)")
+            return 0
+        
+        print(f"\nОбработка категории: {category_name} ({len(new_courses)} новых из {len(courses)})")
+        
+        for i, course in enumerate(new_courses, 1):
+            course_id = course.get("id")
             await self.process_course(course, category_name)
-            if i % 10 == 0 or i == len(courses):
-                print(f"  {category_name}: {i}/{len(courses)} курсов обработано")
+            processed_ids.add(course_id)
+            
+            if i % 10 == 0 or i == len(new_courses):
+                print(f"{category_name}: {i}/{len(new_courses)} курсов обработано")
         
         print(f"Завершено: {category_name}")
+        return len(new_courses)
     
     async def parse(self):
         connector = aiohttp.TCPConnector(limit=50)
@@ -175,13 +185,17 @@ class StepikParser:
             
             course_by_id = {c["id"]: c for c in course_details}
             
+            processed_course_ids = set()
+            total_processed = 0
+            
             for list_name, info in courses_by_lists.items():
                 category_courses = [course_by_id[cid] for cid in info["course_ids"] if cid in course_by_id]
                 if category_courses:
-                    await self.save_courses(category_courses, list_name)
+                    processed = await self.save_courses(category_courses, list_name, processed_course_ids)
+                    total_processed += processed
             
             print(f"\n{'='*60}")
-            print(f"Сохранено {len(course_details)} курсов в '{self.output_dir}'")
+            print(f"Всего обработано уникальных курсов: {total_processed}")
             
             return courses_by_lists, all_unique_course_ids
 
