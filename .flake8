@@ -1,0 +1,7 @@
+[flake8]
+application-import-names = course_searcher
+exclude = .git,__pycache__,venv,*/migrations/
+import-order-style = google
+inline-quotes = double
+max-line-length = 79
+verbose = 1
