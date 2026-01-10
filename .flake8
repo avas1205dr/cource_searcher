@@ -1,5 +1,5 @@
 [flake8]
-application-import-names = course_searcher
+application-import-names = course_searcher,parser
 exclude = .git,__pycache__,venv,*/migrations/
 import-order-style = google
 inline-quotes = double

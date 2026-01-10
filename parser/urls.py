@@ -5,5 +5,5 @@ from parser.views import *
 app_name = "parser"
 
 urlpatterns = [
-    path("", )
+    path("", main_view, name="main")
 ]
