@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 50px auto;">
+    <div style="background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h1 style="margin-top: 0;">Запуск парсера Stepik</h1>
+        
+        <p style="color: #666; line-height: 1.6;">
+            Эта команда запустит парсер курсов со Stepik. Процесс выполняется в фоновом режиме.
+        </p>
+        
+        <div style="background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 4px; margin: 20px 0;">
+            <strong>Внимание:</strong>
+            <ul style="margin: 10px 0 0 0; padding-left: 20px;">
+                <li>Парсинг может занять продолжительное время</li>
+                <li>Следите за прогрессом в консоли/логах</li>
+                <li>Не запускайте парсер повторно, пока не завершится текущий</li>
+            </ul>
+        </div>
+        
+        <form method="post" style="margin-top: 30px;">
+            {% csrf_token %}
+            <button type="submit" style="background: #417690; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-size: 16px;">
+                Запустить парсер
+            </button>
+            <a href="{% url 'admin:index' %}" style="margin-left: 15px; color: #666; text-decoration: none;">Отмена</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

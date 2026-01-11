@@ -172,7 +172,7 @@ class StepikParser:
         cover = course_data.get("cover", "")
         if not cover or cover == "None":
             cover = ""
-
+        print(course_data)
         course, created = Course.objects.update_or_create(
             external_id=course_data["id"],
             defaults={
@@ -183,7 +183,7 @@ class StepikParser:
                 "cover": course_data.get("cover", ""),
                 "is_paid": course_data.get("is_paid", False),
                 "price": course_data.get("price"),
-                "currency": course_data.get("currency", ""),
+                "currency": course_data.get("currency_code", ""),
                 "learners_count": course_data.get("learners_count", 0),
                 "time_to_complete": course_data.get("time_to_complete"),
                 "language": course_data.get("language", ""),
@@ -192,7 +192,6 @@ class StepikParser:
                 "is_active": course_data.get("is_active", True),
                 "is_public": course_data.get("is_public", True),
                 "is_featured": course_data.get("is_featured", False),
-                "rating": course_data.get("rating"),
                 "reviews_count": course_data.get("reviews_count", 0),
                 "raw_data": course_data,
             },
