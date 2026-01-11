@@ -1,6 +1,6 @@
-from django.views.generic import ListView, DetailView
-from django.db.models import Count, Q
-from .models import Course
+from django.views.generic import ListView, DetailView, TemplateView
+from django.db.models import Avg, Count, Q, Max
+from parser.models import Course, Category, Review
 
 
 class MainPageView(ListView):
@@ -112,5 +112,93 @@ class CourseDetailView(DetailView):
             course_lists__in=course.course_lists.all()
         ).exclude(id=course.id).with_rating().distinct()[:3]
         context['similar_courses'] = similar_courses
+
+        return context
+
+class StatsView(TemplateView):
+    template_name = 'parser/stats.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        courses = Course.objects.filter(is_active=True, is_public=True)
+
+        context['total_courses'] = courses.count()
+        
+        avg_rating = courses.with_rating().aggregate(
+            avg=Avg('rating_avg')
+        )['avg']
+        context['avg_rating'] = round(avg_rating, 1) if avg_rating else 0
+
+        max_students = courses.aggregate(
+            max=Max('learners_count')
+        )['max'] or 0
+        context['max_students'] = max_students
+
+        context['total_reviews'] = Review.objects.count()
+
+        lang_stats = courses.values('language').annotate(
+            count=Count('id')
+        ).order_by('-count')
+        
+        total = context['total_courses']
+        context['lang_stats'] = [
+            {
+                'name': dict(Course.LANGUAGE_CHOICES).get(item['language'], 'Не указан'),
+                'count': item['count'],
+                'percent': round(item['count'] / total * 100, 1) if total > 0 else 0
+            }
+            for item in lang_stats
+        ]
+
+        price_stats = courses.aggregate(
+            free=Count('id', filter=Q(is_paid=False)),
+            paid=Count('id', filter=Q(is_paid=True))
+        )
+        context['price_stats'] = {
+            'free': {
+                'count': price_stats['free'],
+                'percent': round(price_stats['free'] / total * 100, 1) if total > 0 else 0
+            },
+            'paid': {
+                'count': price_stats['paid'],
+                'percent': round(price_stats['paid'] / total * 100, 1) if total > 0 else 0
+            }
+        }
+
+        platform_stats = courses.values('platform').annotate(
+            count=Count('id')
+        ).order_by('-count')
+        context['platform_stats'] = [
+            {
+                'name': dict(Course.PLATFORM_CHOICES).get(item['platform'], item['platform']),
+                'count': item['count'],
+                'percent': round(item['count'] / total * 100, 1) if total > 0 else 0
+            }
+            for item in platform_stats
+        ]
+
+        context['top_popular'] = courses.order_by('-learners_count')[:10]
+
+        context['top_rated'] = courses.with_rating().filter(
+            reviews_count_calc__gte=5
+        ).exclude(rating_avg__isnull=True).order_by('-rating_avg', '-reviews_count_calc')[:10]
+
+        context['courses_with_reviews'] = courses.filter(
+            reviews_count__gt=0
+        ).count()
+
+        avg_duration = courses.filter(
+            time_to_complete__isnull=False
+        ).aggregate(avg=Avg('time_to_complete'))['avg']
+        context['avg_duration'] = round(avg_duration / 3600, 1) if avg_duration else 0
+
+        category_stats = Category.objects.annotate(
+            course_count=Count('course_lists__courses', filter=Q(
+                course_lists__courses__is_active=True,
+                course_lists__courses__is_public=True
+            ), distinct=True)
+        ).filter(course_count__gt=0).order_by('-course_count')[:5]
+        context['category_stats'] = category_stats
 
         return context

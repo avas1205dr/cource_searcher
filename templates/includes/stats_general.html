@@ -1,0 +1,27 @@
+<div class="card">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Общая статистика</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-sm mb-0">
+            <tbody>
+                <tr>
+                    <td>Курсов с отзывами</td>
+                    <td class="text-end fw-bold">{{ courses_with_reviews }}</td>
+                </tr>
+                <tr>
+                    <td>Средняя длительность курса</td>
+                    <td class="text-end fw-bold">{{ avg_duration }} ч</td>
+                </tr>
+                <tr>
+                    <td>Всего категорий</td>
+                    <td class="text-end fw-bold">{{ category_stats|length }}</td>
+                </tr>
+                <tr>
+                    <td>Средний рейтинг</td>
+                    <td class="text-end fw-bold">{{ avg_rating }}/5</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

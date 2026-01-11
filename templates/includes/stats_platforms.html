@@ -1,0 +1,22 @@
+<div class="card">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Распределение по платформам</h5>
+    </div>
+    <div class="card-body">
+        {% for platform in platform_stats %}
+            <div class="mb-3">
+                <div class="d-flex justify-content-between mb-1">
+                    <span>{{ platform.name }}</span>
+                    <span>{{ platform.count }} ({{ platform.percent }}%)</span>
+                </div>
+                <div class="progress" style="height: 20px;">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: {{ platform.percent|floatformat:0 }}%;" aria-valuenow="{{ platform.percent }}" aria-valuemin="0" aria-valuemax="100">
+                        {{ platform.percent|floatformat:0 }}%
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-muted mb-0">Нет данных</p>
+        {% endfor %}
+    </div>
+</div>

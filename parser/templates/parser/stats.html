@@ -3,298 +3,41 @@
     <div class="container mt-4">
         <div class="d-flex align-items-center mb-4">
             <i class="bi bi-bar-chart-fill fs-1 text-primary me-3"></i>
-            <h1 class="mb-0">API Статистика</h1>
+            <h1 class="mb-0">Статистика</h1>
         </div>
 
-        <div class="row mb-4">
-            <div class="col-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h2 class="display-4 mb-0">1247</h2>
-                        <p class="text-muted mb-0">Всего курсов</p>
-                    </div>
-                </div>
+        {% include "includes/stats_summary.html" %}
+        
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                {% include "includes/stats_languages.html" %}
             </div>
-            <div class="col-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h2 class="display-4 mb-0">4.6</h2>
-                        <p class="text-muted mb-0">Средний рейтинг</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h2 class="display-4 mb-0">256К</h2>
-                        <p class="text-muted mb-0">Всего студентов</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h2 class="display-4 mb-0">8.5К</h2>
-                        <p class="text-muted mb-0">Всего отзывов</p>
-                    </div>
-                </div>
+            <div class="col-md-6 mb-4">
+                {% include "includes/stats_price.html" %}
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">Распределение по языкам</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Русский</span>
-                                <span>856 (68.6%)</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar" style="width: 68.6%"></div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Английский</span>
-                                <span>391 (31.4%)</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar" style="width: 31.4%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% include "includes/stats_platforms.html" %}
             </div>
-
             <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">Распределение по сложности</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Начальный</span>
-                                <span>524 (42.0%)</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-success" style="width: 42%"></div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Средний</span>
-                                <span>498 (39.9%)</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-success" style="width: 39.9%"></div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Продвинутый</span>
-                                <span>225 (18.1%)</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-success" style="width: 18.1%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% include "includes/stats_general.html" %}
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">Платные vs Бесплатные</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Бесплатные</span>
-                                <span>1089 (87.3%)</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-success" style="width: 87.3%"></div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Платные</span>
-                                <span>158 (12.7%)</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-warning" style="width: 12.7%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% include "includes/stats_top_popular.html" %}
             </div>
-
             <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">Распределение по платформам</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Stepik</span>
-                                <span>987 (79.1%)</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-info" style="width: 79.1%"></div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>OpenEdu</span>
-                                <span>260 (20.9%)</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-info" style="width: 20.9%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">Топ-10 самых популярных курсов</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <span><span class="badge bg-primary me-2">#1</span>Python для начинающих</span>
-                                <span class="badge bg-secondary">25,432</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <span><span class="badge bg-primary me-2">#2</span>Основы SQL</span>
-                                <span class="badge bg-secondary">18,765</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <span><span class="badge bg-primary me-2">#3</span>JavaScript Advanced</span>
-                                <span class="badge bg-secondary">15,234</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <span><span class="badge bg-primary me-2">#4</span>Machine Learning</span>
-                                <span class="badge bg-secondary">12,987</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <span><span class="badge bg-primary me-2">#5</span>Data Science</span>
-                                <span class="badge bg-secondary">11,456</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">Топ-10 самых высоко оцененных</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="list-group list-group-flush">
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <span><span class="badge bg-primary me-2">#1</span>ММДЦММ</span>
-                                <span class="badge bg-warning text-dark">5.0 ★</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <span><span class="badge bg-primary me-2">#2</span>Алгоритмы и структуры данных</span>
-                                <span class="badge bg-warning text-dark">4.9 ★</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <span><span class="badge bg-primary me-2">#3</span>Основы Python</span>
-                                <span class="badge bg-warning text-dark">4.8 ★</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <span><span class="badge bg-primary me-2">#4</span>Web-разработка</span>
-                                <span class="badge bg-warning text-dark">4.7 ★</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <span><span class="badge bg-primary me-2">#5</span>Docker для начинающих</span>
-                                <span class="badge bg-warning text-dark">4.7 ★</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% include "includes/stats_top_rated.html" %}
             </div>
         </div>
 
         <div class="row mb-4">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">Общая статистика</h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-sm mb-0">
-                            <tbody>
-                                <tr>
-                                    <td>Общее количество уроков</td>
-                                    <td class="text-end fw-bold">45,678</td>
-                                </tr>
-                                <tr>
-                                    <td>Выдано сертификатов</td>
-                                    <td class="text-end fw-bold">12,345</td>
-                                </tr>
-                                <tr>
-                                    <td>Средняя длительность курса</td>
-                                    <td class="text-end fw-bold">24.5 ч</td>
-                                </tr>
-                                <tr>
-                                    <td>Курсов с отзывами</td>
-                                    <td class="text-end fw-bold">876</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-white">
-                        <h5 class="mb-0">Статистика по категориям</h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-sm mb-0">
-                            <tbody>
-                                <tr>
-                                    <td>Программирование</td>
-                                    <td class="text-end fw-bold">456</td>
-                                </tr>
-                                <tr>
-                                    <td>Data Science</td>
-                                    <td class="text-end fw-bold">234</td>
-                                </tr>
-                                <tr>
-                                    <td>Web-разработка</td>
-                                    <td class="text-end fw-bold">198</td>
-                                </tr>
-                                <tr>
-                                    <td>Machine Learning</td>
-                                    <td class="text-end fw-bold">156</td>
-                                </tr>
-                                <tr>
-                                    <td>Другие</td>
-                                    <td class="text-end fw-bold">203</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <div class="col-md-12">
+                {% include "includes/stats_categories.html" %}
             </div>
         </div>
     </div>

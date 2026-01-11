@@ -1,0 +1,29 @@
+<div class="card">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Платные vs Бесплатные</h5>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <div class="d-flex justify-content-between mb-1">
+                <span>Бесплатные</span>
+                <span>{{ price_stats.free.count }} ({{ price_stats.free.percent|floatformat:1 }}%)</span>
+            </div>
+            <div class="progress" style="height: 20px;">
+                <div class="progress-bar bg-success" role="progressbar" style="width: {{ price_stats.free.percent|floatformat:0 }}%;" aria-valuenow="{{ price_stats.free.percent }}" aria-valuemin="0" aria-valuemax="100">
+                    {{ price_stats.free.percent|floatformat:0 }}%
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="d-flex justify-content-between mb-1">
+                <span>Платные</span>
+                <span>{{ price_stats.paid.count }} ({{ price_stats.paid.percent|floatformat:1 }}%)</span>
+            </div>
+            <div class="progress" style="height: 20px;">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: {{ price_stats.paid.percent|floatformat:0 }}%;" aria-valuenow="{{ price_stats.paid.percent }}" aria-valuemin="0" aria-valuemax="100">
+                    {{ price_stats.paid.percent|floatformat:0 }}%
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

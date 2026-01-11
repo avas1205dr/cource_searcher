@@ -1,0 +1,22 @@
+<div class="card">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Распределение по языкам</h5>
+    </div>
+    <div class="card-body">
+        {% for lang in lang_stats %}
+            <div class="mb-3">
+                <div class="d-flex justify-content-between mb-1">
+                    <span>{{ lang.name }}</span>
+                    <span>{{ lang.count }} ({{ lang.percent|floatformat:1 }}%)</span>
+                </div>
+                <div class="progress" style="height: 20px;">
+                    <div class="progress-bar" role="progressbar" style="width: {{ lang.percent|floatformat:0 }}%;" aria-valuenow="{{ lang.percent }}" aria-valuemin="0" aria-valuemax="100">
+                        {{ lang.percent|floatformat:0 }}%
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-muted mb-0">Нет данных</p>
+        {% endfor %}
+    </div>
+</div>
