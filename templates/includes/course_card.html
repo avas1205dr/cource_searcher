@@ -1,0 +1,41 @@
+<div class="col-md-6 col-lg-4 mb-4">
+    <div class="card h-100">
+        <div class="card-body">
+            <span class="badge bg-primary mb-2">
+                {% if course.course_lists.all %}
+                    {{ course.course_lists.first.title }}
+                {% else %}
+                    Курс
+                {% endif %}
+            </span>
+            <h5 class="card-title">{{ course.title }}</h5>
+            <div class="mb-3">
+                {% if course.language %}
+                    <span class="badge bg-light text-dark">
+                        <i class="bi bi-translate"></i> {{ course.get_language_display|default:course.language }}
+                    </span>
+                {% endif %}
+                {% if course.raw_data.level %}
+                    <span class="badge bg-light text-dark">
+                        <i class="bi bi-speedometer2"></i> {{ course.raw_data.level }}
+                    </span>
+                {% endif %}
+                {% if course.time_to_complete %}
+                    <span class="badge bg-light text-dark">
+                        <i class="bi bi-clock"></i> {{ course.time_to_complete_to_hours }} часов
+                    </span>
+                {% endif %}
+                {% if course.rating_avg %}
+                    <span class="badge bg-warning text-dark">
+                        <i class="bi bi-star-fill"></i> {{ course.rating_avg }}/5
+                    </span>
+                {% endif %}
+            </div>
+            <p class="text-muted small">Обновлен: {{ course.updated_at|date:"d.m.Y" }}</p>
+            <p class="text-muted small">{{ course.learners_count }} учащихся</p>
+            <a href="https://stepik.org/course/{{ course.external_id }}" target="_blank" 
+               class="btn btn-primary btn-sm">Перейти к курсу</a>
+            <a href="#" class="btn btn-outline-secondary btn-sm">Подробнее</a>
+        </div>
+    </div>
+</div>

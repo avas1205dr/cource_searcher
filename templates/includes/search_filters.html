@@ -1,0 +1,61 @@
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" action="">
+            <div class="row g-3">
+                <div class="col-md-10">
+                    <input type="text" name="search" class="form-control" 
+                           value="{{ search_query }}" placeholder="Поиск по названию...">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100" type="button" 
+                            data-bs-toggle="collapse" data-bs-target="#filters">
+                        <i class="bi bi-funnel"></i> Фильтры
+                    </button>
+                </div>
+            </div>
+            
+            <div class="collapse mt-3" id="filters">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Платформа</label>
+                        <select name="platform" class="form-select">
+                            <option value="">Все платформы</option>
+                            <option value="stepik" {% if selected_platform == 'stepik' %}selected{% endif %}>Stepik</option>
+                            <option value="openedu" {% if selected_platform == 'openedu' %}selected{% endif %}>OpenEdu</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Язык</label>
+                        <select name="language" class="form-select">
+                            <option value="">Все языки</option>
+                            <option value="ru" {% if selected_language == 'ru' %}selected{% endif %}>Русский</option>
+                            <option value="en" {% if selected_language == 'en' %}selected{% endif %}>Английский</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Сортировка</label>
+                        <select name="sort" class="form-select">
+                            <option value="">По умолчанию</option>
+                            <option value="alphabet" {% if selected_sort == 'alphabet' %}selected{% endif %}>По алфавиту (А-Я)</option>
+                            <option value="alphabet_desc" {% if selected_sort == 'alphabet_desc' %}selected{% endif %}>По алфавиту (Я-А)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Цена</label>
+                        <select name="price" class="form-select">
+                            <option value="">Все курсы</option>
+                            <option value="free" {% if selected_price == 'free' %}selected{% endif %}>Бесплатные</option>
+                            <option value="paid" {% if selected_price == 'paid' %}selected{% endif %}>Платные</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-primary">Применить фильтры</button>
+                        <a href="{% url 'parser:main' %}" class="btn btn-secondary">Сбросить</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -82,6 +82,15 @@ class StepikUser(ExternalEntityModel):
 
 
 class Course(ExternalEntityModel):
+    PLATFORM_CHOICES = [
+        ('stepik', 'Stepik'),
+        ('openedu', 'OpenEdu'),
+    ]
+    LANGUAGE_CHOICES = [
+        ('ru', 'Русский'),
+        ('en', 'Английский'),
+    ]
+
     title = models.CharField(max_length=500, verbose_name="Курс")
     slug = models.SlugField(max_length=500, blank=True, verbose_name="Слаг")
     description = models.TextField(blank=True, verbose_name="Описание")
@@ -91,9 +100,20 @@ class Course(ExternalEntityModel):
     price = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Цена",
     )
+    platform = models.CharField(
+        max_length=50, 
+        choices=PLATFORM_CHOICES, 
+        default='stepik', 
+        verbose_name="Платформа"
+    )
     learners_count = models.IntegerField(default=0, verbose_name="Количество записавшихся")
-    time_to_complete = models.IntegerField(null=True, blank=True, verbose_name="Время на выполнение (ак.ч.)")
-    language = models.CharField(max_length=10, blank=True, verbose_name="Язык")
+    time_to_complete = models.IntegerField(null=True, blank=True, verbose_name="Время на выполнение (секунд)")
+    language = models.CharField(
+        max_length=10, 
+        choices=LANGUAGE_CHOICES, 
+        blank=True, 
+        verbose_name="Язык",
+    )
     is_active = models.BooleanField(default=True, verbose_name="Активный")
     is_public = models.BooleanField(default=True, verbose_name="Опубликован")
     is_featured = models.BooleanField(default=False, verbose_name="Запись ещё не началась")
@@ -118,6 +138,11 @@ class Course(ExternalEntityModel):
 
     def __str__(self):
         return self.title
+    
+    def time_to_complete_to_hours(self):
+        if not self.time_to_complete:
+            return "Не указано"
+        return round(self.time_to_complete / 3600, 2)
 
 
 class Review(ExternalEntityModel):

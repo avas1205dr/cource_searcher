@@ -153,26 +153,10 @@ class StepikParser:
 
     @sync_to_async
     def save_course_to_db(self, course_data: Dict) -> Course:
-        begin_date = None
-        end_date = None
-        if course_data.get("begin_date"):
-            try:
-                begin_date = datetime.fromisoformat(
-                    course_data["begin_date"].replace("Z", "+00:00")
-                )
-            except:
-                pass
-        if course_data.get("end_date"):
-            try:
-                end_date = datetime.fromisoformat(
-                    course_data["end_date"].replace("Z", "+00:00")
-                )
-            except:
-                pass
         cover = course_data.get("cover", "")
         if not cover or cover == "None":
             cover = ""
-        print(course_data)
+        
         course, created = Course.objects.update_or_create(
             external_id=course_data["id"],
             defaults={
@@ -180,20 +164,18 @@ class StepikParser:
                 "slug": course_data.get("slug", ""),
                 "description": course_data.get("description", ""),
                 "summary": course_data.get("summary", ""),
-                "cover": course_data.get("cover", ""),
+                "cover": cover,
                 "is_paid": course_data.get("is_paid", False),
                 "price": course_data.get("price"),
-                "currency": course_data.get("currency_code", ""),
                 "learners_count": course_data.get("learners_count", 0),
                 "time_to_complete": course_data.get("time_to_complete"),
                 "language": course_data.get("language", ""),
-                "begin_date": begin_date,
-                "end_date": end_date,
                 "is_active": course_data.get("is_active", True),
                 "is_public": course_data.get("is_public", True),
                 "is_featured": course_data.get("is_featured", False),
                 "reviews_count": course_data.get("reviews_count", 0),
                 "raw_data": course_data,
+                "platform": "stepik",
             },
         )
         return course
@@ -333,7 +315,6 @@ class StepikParser:
             external_id=category_data["id"],
             defaults={
                 "title": category_data.get("title", ""),
-                "description": category_data.get("description", ""),
             },
         )
         return category
