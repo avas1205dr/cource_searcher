@@ -1,0 +1,56 @@
+<div class="card mb-4">
+    {% if course.cover %}
+        <img src="{{ course.cover }}" class="card-img-top" alt="{{ course.title }}">
+    {% else %}
+        <img src="https://via.placeholder.com/800x400/0d6efd/ffffff?text={{ course.platform|upper }}" class="card-img-top" alt="{{ course.title }}">
+    {% endif %}
+    <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+            <span class="badge bg-primary me-2">{{ course.get_platform_display }}</span>
+            {% if course.is_active %}
+                <span class="badge bg-success me-2">
+                    <i class="bi bi-check-circle"></i> Активен
+                </span>
+            {% endif %}
+        </div>
+        
+        <h1 class="mb-3">{{ course.title }}</h1>
+        
+        <div class="d-flex align-items-center mb-4 flex-wrap">
+            {% if course.rating_avg %}
+                <div class="me-4 mb-2">
+                    <i class="bi bi-star-fill text-warning"></i>
+                    <strong>{{ course.rating_avg }}</strong> / 5
+                    <span class="text-muted">({{ course.reviews_count_calc }} отзывов)</span>
+                </div>
+            {% endif %}
+            <div class="me-4 mb-2">
+                <i class="bi bi-people-fill text-primary"></i>
+                <strong>{{ course.learners_count|default:"0" }}</strong> студентов
+            </div>
+            {% if course.time_to_complete %}
+                <div class="mb-2">
+                    <i class="bi bi-clock-fill text-info"></i>
+                    <strong>{{ course.time_to_complete_to_hours }}</strong> часов
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="mb-4">
+            {% if course.language %}
+                <span class="badge bg-light text-dark me-2">
+                    <i class="bi bi-translate"></i> {{ course.get_language_display }}
+                </span>
+            {% endif %}
+            {% if course.is_paid %}
+                <span class="badge bg-success text-dark me-2">
+                    <i>₽</i> {{ course.price|default:"Платный" }}
+                </span>
+            {% else %}
+                <span class="badge bg-light text-dark me-2">
+                    <i class="bi bi-gift"></i> Бесплатно
+                </span>
+            {% endif %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,95 @@
+<div class="card mb-4">
+    <div class="card-header bg-white">
+        <h4 class="mb-0">Отзывы студентов</h4>
+    </div>
+    <div class="card-body">
+        {% if course.rating_avg %}
+            <div class="row mb-4">
+                <div class="col-md-3 text-center">
+                    <h2 class="display-3 mb-0">{{ course.rating_avg }}</h2>
+                    <div class="text-warning mb-2">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= course.rating_avg|floatformat:"0"|add:"0" %}
+                                <i class="bi bi-star-fill"></i>
+                            {% else %}
+                                <i class="bi bi-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <p class="text-muted">{{ reviews_stats.total }} отзывов</p>
+                </div>
+                <div class="col-md-9">
+                    {% for score in "54321" %}
+                        {% with score_num=score|add:"0" %}
+                            <div class="mb-2">
+                                <div class="d-flex align-items-center">
+                                    <span class="me-2">{{ score_num }} <i class="bi bi-star-fill text-warning"></i></span>
+                                    <div class="progress flex-grow-1 me-2">
+                                        {% if reviews_stats.total > 0 %}
+                                            {% if score_num == 5 %}
+                                                {% widthratio reviews_stats.score_5 reviews_stats.total 100 as width %}
+                                            {% elif score_num == 4 %}
+                                                {% widthratio reviews_stats.score_4 reviews_stats.total 100 as width %}
+                                            {% elif score_num == 3 %}
+                                                {% widthratio reviews_stats.score_3 reviews_stats.total 100 as width %}
+                                            {% elif score_num == 2 %}
+                                                {% widthratio reviews_stats.score_2 reviews_stats.total 100 as width %}
+                                            {% else %}
+                                                {% widthratio reviews_stats.score_1 reviews_stats.total 100 as width %}
+                                            {% endif %}
+                                            <div class="progress-bar bg-warning" style="width: {{ width }}%"></div>
+                                        {% endif %}
+                                    </div>
+                                    <span>
+                                        {% if score_num == 5 %}{{ reviews_stats.score_5 }}
+                                        {% elif score_num == 4 %}{{ reviews_stats.score_4 }}
+                                        {% elif score_num == 3 %}{{ reviews_stats.score_3 }}
+                                        {% elif score_num == 2 %}{{ reviews_stats.score_2 }}
+                                        {% else %}{{ reviews_stats.score_1 }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endwith %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <hr>
+        {% endif %}
+
+        {% for review in reviews %}
+            <div class="mb-4">
+                <div class="d-flex mb-3">
+                    {% if review.user.avatar %}
+                        <img src="{{ review.user.avatar }}" class="rounded-circle me-3" style="width: 50px; height: 50px;" alt="Avatar">
+                    {% else %}
+                        <img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="Avatar">
+                    {% endif %}
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h6 class="mb-0">{{ review.user.full_name|default:"Пользователь" }}</h6>
+                                <div class="text-warning">
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= review.score %}
+                                            <i class="bi bi-star-fill"></i>
+                                        {% else %}
+                                            <i class="bi bi-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <small class="text-muted">{{ review.create_date|date:"d.m.Y" }}</small>
+                        </div>
+                        {% if review.text %}
+                            <p class="mb-0">{{ review.text }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p class="text-muted text-center">Отзывов пока нет</p>
+        {% endfor %}
+    </div>
+</div>

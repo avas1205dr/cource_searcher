@@ -35,7 +35,7 @@
             <p class="text-muted small">{{ course.learners_count }} учащихся</p>
             <a href="https://stepik.org/course/{{ course.external_id }}" target="_blank" 
                class="btn btn-primary btn-sm">Перейти к курсу</a>
-            <a href="#" class="btn btn-outline-secondary btn-sm">Подробнее</a>
+            <a href="{% url "parser:course_detail" course.id %}" class="btn btn-outline-secondary btn-sm">Подробнее</a>
         </div>
     </div>
 </div>

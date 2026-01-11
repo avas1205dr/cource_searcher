@@ -1,0 +1,48 @@
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <small class="text-muted d-block mb-1"><i class="bi bi-building me-1"></i>Платформа</small>
+            <span class="badge bg-primary">{{ course.get_platform_display }}</span>
+        </div>
+        <div class="mb-3">
+            <small class="text-muted d-block mb-1"><i class="bi bi-people me-1"></i>Студентов</small>
+            <strong>{{ course.learners_count|default:"0" }}</strong>
+        </div>
+        {% if course.authors.exists %}
+            <div class="mb-3">
+                <small class="text-muted d-block mb-1"><i class="bi bi-person me-1"></i>Авторы</small>
+                {% for author in course.authors.all %}
+                    <strong>{{ author.full_name|default:"Автор" }}</strong>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-md-6">
+        {% if course.language %}
+            <div class="mb-3">
+                <small class="text-muted d-block mb-1"><i class="bi bi-translate me-1"></i>Язык</small>
+                <strong>{{ course.get_language_display }}</strong>
+            </div>
+        {% endif %}
+        {% if course.time_to_complete %}
+            <div class="mb-3">
+                <small class="text-muted d-block mb-1"><i class="bi bi-clock me-1"></i>Длительность</small>
+                <strong>{{ course.time_to_complete_to_hours }} часов</strong>
+            </div>
+        {% endif %}
+        <div class="mb-3">
+            <small class="text-muted d-block mb-1"><i class="bi bi-calendar me-1"></i>Обновлен</small>
+            <strong>{{ course.updated_at|date:"d.m.Y" }}</strong>
+        </div>
+    </div>
+</div>
+
+{% if course.summary %}
+    <h4 class="mb-3">О курсе</h4>
+    <div class="text-muted">{{ course.summary|linebreaks }}</div>
+{% endif %}
+
+{% if course.description %}
+    <h4 class="mb-3 mt-4">Описание</h4>
+    <div class="text-muted">{{ course.description|safe }}</div>
+{% endif %}
