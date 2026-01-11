@@ -3,7 +3,9 @@ from django.db.models.functions import Round
 
 
 class TimestampedModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создано")
+    created_at = models.DateTimeField(
+        auto_now_add=True, verbose_name="Создано"
+    )
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Изменено")
 
     class Meta:
@@ -11,7 +13,9 @@ class TimestampedModel(models.Model):
 
 
 class ExternalEntityModel(TimestampedModel):
-    external_id = models.IntegerField(unique=True, db_index=True, verbose_name="ID на Stepik")
+    external_id = models.IntegerField(
+        unique=True, db_index=True, verbose_name="ID на Stepik"
+    )
 
     class Meta:
         abstract = True
@@ -23,18 +27,21 @@ class CourseQuerySet(models.QuerySet):
             rating_avg=Round(
                 models.Avg("reviews__score"),
                 0,
-                output_field=models.DecimalField(max_digits=3,
-                decimal_places=2),
+                output_field=models.DecimalField(
+                    max_digits=3, decimal_places=2
+                ),
             ),
             reviews_count_calc=models.Count("reviews"),
         )
 
+
 class CourseManager(models.Manager):
     def get_queryset(self):
         return CourseQuerySet(self.model, using=self._db)
-    
+
     def with_rating(self):
         return self.get_queryset().with_rating()
+
 
 class Category(ExternalEntityModel):
     title = models.CharField(max_length=500, verbose_name="Категория")
@@ -68,10 +75,16 @@ class CourseList(ExternalEntityModel):
 
 
 class StepikUser(ExternalEntityModel):
-    full_name = models.CharField(max_length=500, blank=True, verbose_name="ФИО")
-    avatar = models.URLField(blank=True, max_length=1000, verbose_name="Фото профиля")
+    full_name = models.CharField(
+        max_length=500, blank=True, verbose_name="ФИО"
+    )
+    avatar = models.URLField(
+        blank=True, max_length=1000, verbose_name="Фото профиля"
+    )
     bio = models.TextField(blank=True, verbose_name="Описание профиля")
-    details = models.JSONField(default=dict, blank=True, verbose_name="Дополнительная информация")
+    details = models.JSONField(
+        default=dict, blank=True, verbose_name="Дополнительная информация"
+    )
 
     class Meta:
         verbose_name = "Пользователь на Stepik"
@@ -83,54 +96,79 @@ class StepikUser(ExternalEntityModel):
 
 class Course(ExternalEntityModel):
     PLATFORM_CHOICES = [
-        ('stepik', 'Stepik'),
-        ('openedu', 'OpenEdu'),
+        ("stepik", "Stepik"),
+        ("openedu", "OpenEdu"),
     ]
     LANGUAGE_CHOICES = [
-        ('ru', 'Русский'),
-        ('en', 'Английский'),
+        ("ru", "Русский"),
+        ("en", "Английский"),
     ]
 
     title = models.CharField(max_length=500, verbose_name="Курс")
     slug = models.SlugField(max_length=500, blank=True, verbose_name="Слаг")
     description = models.TextField(blank=True, verbose_name="Описание")
     summary = models.TextField(blank=True, verbose_name="О курсе")
-    cover = models.URLField(blank=True, max_length=1000, verbose_name="Обложка")
+    cover = models.URLField(
+        blank=True, max_length=1000, verbose_name="Обложка"
+    )
     is_paid = models.BooleanField(default=False, verbose_name="Платный")
     price = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Цена",
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name="Цена",
     )
     platform = models.CharField(
-        max_length=50, 
-        choices=PLATFORM_CHOICES, 
-        default='stepik', 
-        verbose_name="Платформа"
+        max_length=50,
+        choices=PLATFORM_CHOICES,
+        default="stepik",
+        verbose_name="Платформа",
     )
-    learners_count = models.IntegerField(default=0, verbose_name="Количество записавшихся")
-    time_to_complete = models.IntegerField(null=True, blank=True, verbose_name="Время на выполнение (секунд)")
+    learners_count = models.IntegerField(
+        default=0, verbose_name="Количество записавшихся"
+    )
+    time_to_complete = models.IntegerField(
+        null=True, blank=True, verbose_name="Время на выполнение (секунд)"
+    )
     language = models.CharField(
-        max_length=10, 
-        choices=LANGUAGE_CHOICES, 
-        blank=True, 
+        max_length=10,
+        choices=LANGUAGE_CHOICES,
+        blank=True,
         verbose_name="Язык",
     )
     is_active = models.BooleanField(default=True, verbose_name="Активный")
     is_public = models.BooleanField(default=True, verbose_name="Опубликован")
-    is_featured = models.BooleanField(default=False, verbose_name="Запись ещё не началась")
-    reviews_count = models.IntegerField(default=0, verbose_name="Количество оценок")
+    is_featured = models.BooleanField(
+        default=False, verbose_name="Запись ещё не началась"
+    )
+    reviews_count = models.IntegerField(
+        default=0, verbose_name="Количество оценок"
+    )
     course_lists = models.ManyToManyField(
-        CourseList, related_name="courses", blank=True, verbose_name="Подкатегории"
+        CourseList,
+        related_name="courses",
+        blank=True,
+        verbose_name="Подкатегории",
     )
     authors = models.ManyToManyField(
-        StepikUser, related_name="authored_courses", blank=True, verbose_name="Авторы"
+        StepikUser,
+        related_name="authored_courses",
+        blank=True,
+        verbose_name="Авторы",
     )
     instructors = models.ManyToManyField(
-        StepikUser, related_name="instructed_courses", blank=True, verbose_name="Преподаватели"
+        StepikUser,
+        related_name="instructed_courses",
+        blank=True,
+        verbose_name="Преподаватели",
     )
-    raw_data = models.JSONField(default=dict, blank=True, verbose_name="Данные с запроса")
+    raw_data = models.JSONField(
+        default=dict, blank=True, verbose_name="Данные с запроса"
+    )
 
     objects = CourseManager()
-    
+
     class Meta:
         ordering = ["-learners_count"]
         verbose_name = "Курс"
@@ -138,7 +176,7 @@ class Course(ExternalEntityModel):
 
     def __str__(self):
         return self.title
-    
+
     def time_to_complete_to_hours(self):
         if not self.time_to_complete:
             return "Не указано"
@@ -147,7 +185,10 @@ class Course(ExternalEntityModel):
 
 class Review(ExternalEntityModel):
     course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name="reviews", verbose_name="Отзыв"
+        Course,
+        on_delete=models.CASCADE,
+        related_name="reviews",
+        verbose_name="Отзыв",
     )
     user = models.ForeignKey(
         StepikUser,
@@ -158,9 +199,15 @@ class Review(ExternalEntityModel):
     )
     score = models.IntegerField(verbose_name="Оценка")
     text = models.TextField(blank=True, verbose_name="Комментарий к отзыву")
-    create_date = models.DateTimeField(null=True, blank=True, verbose_name="Дата публикации")
-    update_date = models.DateTimeField(null=True, blank=True, verbose_name="Дата изменения")
-    raw_data = models.JSONField(default=dict, blank=True, verbose_name="Данные с запроса")
+    create_date = models.DateTimeField(
+        null=True, blank=True, verbose_name="Дата публикации"
+    )
+    update_date = models.DateTimeField(
+        null=True, blank=True, verbose_name="Дата изменения"
+    )
+    raw_data = models.JSONField(
+        default=dict, blank=True, verbose_name="Данные с запроса"
+    )
 
     class Meta:
         ordering = ["-create_date"]

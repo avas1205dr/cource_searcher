@@ -3,7 +3,6 @@ import asyncio
 from fake_useragent import UserAgent
 from typing import List, Dict
 from asgiref.sync import sync_to_async
-from django.db import transaction
 from datetime import datetime
 
 from parser.models import Category, CourseList, StepikUser, Course, Review
@@ -83,7 +82,7 @@ class StepikParser:
         self, course_ids: List[int], batch_size: int = 100
     ) -> List[Dict]:
         batches = [
-            course_ids[i : i + batch_size]
+            course_ids[i: i + batch_size]
             for i in range(0, len(course_ids), batch_size)
         ]
         all_courses = []
@@ -156,7 +155,7 @@ class StepikParser:
         cover = course_data.get("cover", "")
         if not cover or cover == "None":
             cover = ""
-        
+
         course, created = Course.objects.update_or_create(
             external_id=course_data["id"],
             defaults={
@@ -207,16 +206,16 @@ class StepikParser:
                 create_date = datetime.fromisoformat(
                     review_data["create_date"].replace("Z", "+00:00")
                 )
-            except:
-                pass
+            except Exception as e:
+                print(e.__class__.__name__)
 
         if review_data.get("update_date"):
             try:
                 update_date = datetime.fromisoformat(
                     review_data["update_date"].replace("Z", "+00:00")
                 )
-            except:
-                pass
+            except Exception as e:
+                print(e.__class__.__name__)
 
         review, created = Review.objects.update_or_create(
             external_id=review_data["id"],
@@ -257,7 +256,9 @@ class StepikParser:
         course_obj = await self.save_course_to_db(course)
 
         authors = [
-            users_db[uid] for uid in course.get("authors", []) if uid in users_db
+            users_db[uid]
+            for uid in course.get("authors", [])
+            if uid in users_db
         ]
         instructors = [
             users_db[uid]
@@ -288,10 +289,12 @@ class StepikParser:
             return 0
 
         print(
-            f"\nОбработка категории: {list_name} ({len(new_courses)} новых из {len(courses)})"
+            f"\nОбработка категории: {list_name} ({len(new_courses)} новых из {len(courses)})" # noqa
         )
 
-        course_list_obj = await self.save_course_list_to_db(list_data, category)
+        course_list_obj = await self.save_course_list_to_db(
+            list_data, category
+        )
 
         for i, course in enumerate(new_courses, 1):
             course_id = course.get("id")
@@ -301,7 +304,7 @@ class StepikParser:
 
                 if i % 10 == 0 or i == len(new_courses):
                     print(
-                        f"{list_name}: {i}/{len(new_courses)} курсов обработано"
+                        f"{list_name}: {i}/{len(new_courses)} курсов обработано" # noqa
                     )
             except Exception as e:
                 print(f"Ошибка при обработке курса {course_id}: {e}")
